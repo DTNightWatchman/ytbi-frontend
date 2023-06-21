@@ -7,3 +7,4 @@ export default function access(initialState: { currentUser?: API.LoginUserVO } |
     canAdmin: currentUser && currentUser.userRole === 'user',
   };
 }
+
