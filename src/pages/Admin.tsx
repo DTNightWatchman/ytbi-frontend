@@ -23,7 +23,7 @@ const Admin: React.FC = () => {
             textAlign: 'center',
           }}
         >
-          <SmileTwoTone /> Ant Design Pro <HeartTwoTone twoToneColor="#eb2f96" /> You
+          <SmileTwoTone /> YT smart BI <HeartTwoTone twoToneColor="#eb2f96" /> You
         </Typography.Title>
       </Card>
       <p
@@ -33,7 +33,7 @@ const Admin: React.FC = () => {
         }}
       >
         Want to add more pages? Please refer to{' '}
-        <a href="https://pro.ant.design/docs/block-cn" target="_blank" rel="noopener noreferrer">
+        <a href="https://gitee.com/YTbaiduren" target="_blank" rel="noopener noreferrer">
           use block
         </a>
         。

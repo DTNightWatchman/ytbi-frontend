@@ -3,7 +3,7 @@ import { DefaultFooter } from '@ant-design/pro-components';
 import '@umijs/max';
 import React from 'react';
 const Footer: React.FC = () => {
-  const defaultMessage = '蚂蚁集团体验技术部出品';
+  const defaultMessage = 'YT摆渡人';
   const currentYear = new Date().getFullYear();
   return (
     <DefaultFooter
@@ -13,21 +13,21 @@ const Footer: React.FC = () => {
       copyright={`${currentYear} ${defaultMessage}`}
       links={[
         {
-          key: 'Ant Design Pro',
-          title: 'Ant Design Pro',
-          href: 'https://pro.ant.design',
+          key: 'YT smart BI',
+          title: 'gitee地址',
+          href: 'https://gitee.com/YTbaiduren',
           blankTarget: true,
         },
         {
           key: 'github',
           title: <GithubOutlined />,
-          href: 'https://github.com/ant-design/ant-design-pro',
+          href: 'https://github.com/DTNightWatchman',
           blankTarget: true,
         },
         {
-          key: 'Ant Design',
-          title: 'Ant Design',
-          href: 'https://ant.design',
+          key: 'YT smart BI',
+          title: 'YT smart BI',
+          href: 'https://github.com/DTNightWatchman/yt-bi-project',
           blankTarget: true,
         },
       ]}
