@@ -56,7 +56,8 @@ const Login: React.FC = () => {
    * 登录成功后获取用户信息
    */
   const fetchUserInfo = async () => {
-    const userInfo = await getLoginUserUsingGET();
+    const res: API.BaseResponseUserVO_ = await getLoginUserUsingGET();
+    const userInfo: API.UserVO | undefined = res.data;
     if (userInfo) {
       flushSync(() => {
         setInitialState((s) => ({

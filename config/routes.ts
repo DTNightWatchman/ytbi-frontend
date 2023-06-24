@@ -1,6 +1,7 @@
 ﻿export default [
   { path: '/user', layout: false, routes: [{ path: '/user/login', component: './User/Login' }] },
   { path: '/welcome', name: "初始页面",icon: 'smile', component: './Welcome' },
+  { path: '/add-chart', name: "添加图表", component: './AddChart'},
   {
     path: '/admin',
     icon: 'crown',
@@ -12,6 +13,6 @@
     ],
   },
   { icon: 'table', name: "列表页", path: '/list', component: './TableList' },
-  { path: '/', redirect: '/welcome' },
+  { path: '/', redirect: '/add-chart',},
   { path: '*', layout: false, component: './404' },
 ];
