@@ -1,13 +1,9 @@
 import Footer from '@/components/Footer';
-import { getFakeCaptcha } from '@/services/ant-design-pro/login';
 import { getLoginUserUsingGET, userLoginUsingPOST } from '@/services/ytbi-backend/userController';
 import {
-  AlipayCircleOutlined,
   LockOutlined,
   MobileOutlined,
-  TaobaoCircleOutlined,
   UserOutlined,
-  WeiboCircleOutlined,
 } from '@ant-design/icons';
 import { LoginForm, ProFormCaptcha, ProFormText } from '@ant-design/pro-components';
 import { useEmotionCss } from '@ant-design/use-emotion-css';
@@ -85,7 +81,7 @@ const Login: React.FC = () => {
       }
       console.log(res);
       // 如果失败去设置用户错误信息
-      setUserLoginState(msg);
+      //setUserLoginState(msg);
     } catch (error) {
       const defaultLoginFailureMessage = '登录失败，请重试！';
       console.log(error);
