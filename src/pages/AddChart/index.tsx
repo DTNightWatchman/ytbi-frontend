@@ -1,23 +1,14 @@
+import { genChartByAiUsingPOST } from '@/services/ytbi-backend/chartController';
 import { UploadOutlined } from '@ant-design/icons';
-import {
-  Button,
-  Form,
-  Select,
-  Input,
-  Space,
-  Card,
-  Upload, message, Row, Col,
-} from 'antd';
-import React, {useState} from 'react';
-import {PageContainer} from "@ant-design/pro-components";
-import {genChartByAiUsingPOST} from "@/services/ytbi-backend/chartController";
+import { PageContainer } from '@ant-design/pro-components';
+import { Button, Card, Col, Form, Input, message, Row, Select, Space, Spin, Upload } from 'antd';
 import ReactECharts from 'echarts-for-react';
+import React, { useState } from 'react';
 /**
  * 添加图表
  * @constructor
  */
 const AddChart: React.FC = () => {
-
   const formItemLayout = {
     labelCol: { span: 6 },
     wrapperCol: { span: 14 },
@@ -44,50 +35,52 @@ const AddChart: React.FC = () => {
     // 对接后端
     const params = {
       ...values,
-      file: undefined
-    }
+      file: undefined,
+    };
     try {
-      setSubmitLoading(true)
-      const res: API.BaseResponseBiResponse_ = await genChartByAiUsingPOST(params, {}, values.file[0].originFileObj)
+      setSubmitLoading(true);
+      setChartOption(undefined);
+      setChartInfo(undefined);
+      const res: API.BaseResponseBiResponse_ = await genChartByAiUsingPOST(
+        params,
+        {},
+        values.file[0].originFileObj,
+      );
       console.log(res);
       if (res.code === 0) {
         if (res.data) {
-          alert(1)
-          const tmpOption = JSON.parse(res.data.genOption ?? "");
+          const tmpOption = JSON.parse(res.data.genOption ?? '');
           // if (tmpOption) {
           //   throw new Error("图表代码解析错误");
           // }
-          alert(2)
-          message.success("分析成功");
+          message.success('分析成功');
           // 数据展示
           setChartOption(tmpOption);
           setChartInfo(res.data);
-          alert(3)
-          console.log(chartOption)
+          console.log(chartOption);
         } else {
           message.error(res.message);
         }
       } else {
         message.error(res.message);
       }
-    }  finally {
+    } finally {
       setSubmitLoading(false);
     }
-
   };
 
   return (
     <PageContainer>
       <Row gutter={24}>
         <Col span={12}>
-          <Card title={"智能分析"}>
-            <div className={"add-chart"}>
+          <Card title={'智能分析'}>
+            <div className={'add-chart'}>
               <Form
                 name="addChart"
                 {...formItemLayout}
-                labelAlign={"left"}
+                labelAlign={'left'}
                 onFinish={onFinish}
-                initialValues={{  }}
+                initialValues={{}}
                 style={{ maxWidth: 600 }}
               >
                 <Form.Item
@@ -107,16 +100,15 @@ const AddChart: React.FC = () => {
                   <Select
                     placeholder="请选择图表样式"
                     options={[
-                      {value: "折线图", label: '折线图'},
-                      {value: "饼图", label: '饼图'},
-                      {value: "柱状图", label: '柱状图'},
-                      {value: "堆叠图", label: '堆叠图'},
-                      {value: "雷达图", label: '雷达图'},
-                      {value: "热力图", label: '热力图'}
+                      { value: '折线图', label: '折线图' },
+                      { value: '饼图', label: '饼图' },
+                      { value: '柱状图', label: '柱状图' },
+                      { value: '堆叠图', label: '堆叠图' },
+                      { value: '雷达图', label: '雷达图' },
+                      { value: '热力图', label: '热力图' },
                     ]}
                   />
                 </Form.Item>
-
 
                 <Form.Item
                   name="goal"
@@ -138,10 +130,14 @@ const AddChart: React.FC = () => {
                   </Upload>
                 </Form.Item>
 
-
                 <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
                   <Space>
-                    <Button type="primary" htmlType="submit" loading={submitLoading} disabled={ submitLoading}>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      loading={submitLoading}
+                      disabled={submitLoading}
+                    >
                       分析数据
                     </Button>
                     <Button htmlType="reset">reset</Button>
@@ -152,25 +148,35 @@ const AddChart: React.FC = () => {
           </Card>
         </Col>
         <Col span={12}>
-          <Card title={"分析结论"}>
-            <div>{chartInfo?.genResult ?? <div>请上传图表等信息得到分析结论</div>}</div>
-          </Card>
-          <br/>
-          <Card title={"可视化图表"}>
+          <Card title={'分析结论'}>
             <div>
-              {
-                chartOption && <ReactECharts option={chartOption} />
-              }
+              {!chartInfo?.genResult ? (
+                <div>
+                  {submitLoading ? (
+                    <Spin spinning={submitLoading} />
+                  ) : (
+                    <div>请上传图表等信息得到分析结论</div>
+                  )}
+                </div>
+              ) : (
+                chartInfo?.genResult
+              )}
+            </div>
+          </Card>
+          <br />
+          <Card title={'可视化图表'}>
+            <div>
+              {chartOption ? (
+                <ReactECharts option={chartOption} />
+              ) : (
+                <div>请上传图表等信息得到分析结论</div>
+              )}
+              <Spin spinning={submitLoading} />
             </div>
           </Card>
         </Col>
       </Row>
-
-
-
-
     </PageContainer>
-
   );
 };
 export default AddChart;
