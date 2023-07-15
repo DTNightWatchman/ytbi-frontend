@@ -5,6 +5,8 @@ import { Card, List, message, Typography } from 'antd';
 import Search from 'antd/es/input/Search';
 import ReactECharts from 'echarts-for-react';
 import React, { useEffect, useState } from 'react';
+import { SmileOutlined } from '@ant-design/icons';
+import { Button, Result } from 'antd';
 
 const { Title } = Typography;
 const History: React.FC = () => {
@@ -80,9 +82,11 @@ const History: React.FC = () => {
             <List.Item
               key={item.id}
               extra={
-                <Card style={{ width: 600 }}>
-                  <ReactECharts option={JSON.parse(item.genChart ?? '{}')} />
-                </Card>
+                item.genChart ? <>
+                  <Card style={{ width: 600 }}>
+                    <ReactECharts option={JSON.parse(item.genChart ?? '{}')} />
+                  </Card>
+                </> : <></>
               }
             >
               <List.Item.Meta
@@ -97,10 +101,57 @@ const History: React.FC = () => {
                   <span>{item.goal}</span>
                   <br />
                   <br />
-                  <span>
-                    <Title level={5}>分析结果：</Title>
-                  </span>
-                  <span>{item.genResult}</span>
+                  <>
+                    {
+                      item?.status === 0 && <>
+                        <Result
+                          status="warning"
+                          title="待生成"
+                          subTitle={item.execMessage ?? '当前图表生成队列繁忙，请耐心等候'}
+                          extra={
+                            <Button type="primary" key="console">
+                              开通会员加速
+                            </Button>
+                          }
+                        />
+                      </>
+                    }
+                    {
+                      item?.status === 1 && <>
+                        <Result
+                          status="warning"
+                          title="待生成"
+                          subTitle={item.execMessage ?? '当前图表生成队列繁忙，请耐心等候'}
+                          extra={
+                            <Button type="primary" key="console">
+                              开通会员加速
+                            </Button>
+                          }
+                        />
+                      </>
+                    }
+                    {
+                      item?.status === 2 && <>
+                        <span>
+                          <Title level={5}>分析结果：</Title>
+                        </span>
+                        <span>{item.genResult}</span>
+                      </>
+                    }
+                    {
+                      item?.status === 3 && <>
+                        <Result
+                          status="error"
+                          title="生成失败"
+                          subTitle={item.execMessage ?? '生成失败，请重试'}
+                          extra={[
+                            <Button key="buy">Try Again</Button>,
+                          ]}
+                        />
+                      </>
+
+                    }
+                  </>
                 </div>
               }
             </List.Item>
