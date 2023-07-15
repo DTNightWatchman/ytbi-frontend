@@ -17,6 +17,21 @@ export async function addChartUsingPOST(
   });
 }
 
+/** listChartVOByPageAll POST /api/post/admin/list/page/vo */
+export async function listChartVOByPageAllUsingPOST(
+  body: API.ChartQueryRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponsePageChartVO_>('/api/post/admin/list/page/vo', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** deleteChart POST /api/post/delete */
 export async function deleteChartUsingPOST(
   body: API.DeleteRequest,
