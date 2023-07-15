@@ -115,11 +115,13 @@ declare namespace API {
     chartData?: string;
     chartType?: string;
     createTime?: string;
+    execMessage?: string;
     genChart?: string;
     genResult?: string;
     goal?: string;
     id?: number;
     name?: string;
+    status?: number;
     updateTime?: string;
     userId?: number;
   };
