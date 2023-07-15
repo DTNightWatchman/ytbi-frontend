@@ -1,10 +1,11 @@
 // @ts-ignore
-import { genChartByAiUsingPOST } from '@/services/ytbi-backend/chartController';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import {genChartByAiAsyncUsingPOST, genChartByAiUsingPOST} from '@/services/ytbi-backend/chartController';
 import { UploadOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
-import { Button, Card, Col, Form, Input, message, Row, Select, Space, Spin, Upload } from 'antd';
-import ReactECharts from 'echarts-for-react';
+import { Button, Card, Col, Form, Input, message, Row, Select, Space, Upload } from 'antd';
 import React, { useState } from 'react';
+import {useForm} from "antd/es/form/Form";
 /**
  * 添加图表
  * @constructor
@@ -15,9 +16,8 @@ const AddChart: React.FC = () => {
     wrapperCol: { span: 14 },
   };
 
-  const [chartInfo, setChartInfo] = useState<API.BiResponse>();
   const [submitLoading, setSubmitLoading] = useState<boolean>(false);
-  const [chartOption, setChartOption] = useState<any>();
+  const [form, setForm] = useForm();
 
   const normFile = (e: any) => {
     console.log('Upload event:', e);
@@ -40,25 +40,16 @@ const AddChart: React.FC = () => {
     };
     try {
       setSubmitLoading(true);
-      setChartOption(undefined);
-      setChartInfo(undefined);
-      const res: API.BaseResponseBiResponse_ = await genChartByAiUsingPOST(
+      const res: API.BaseResponseBiResponse_ = await genChartByAiAsyncUsingPOST(
         params,
         {},
         values.file[0].originFileObj,
       );
       console.log(res);
       if (res.code === 0) {
-        if (res.data) {
-          const tmpOption = JSON.parse(res.data.genOption ?? '');
-          // if (tmpOption) {
-          //   throw new Error("图表代码解析错误");
-          // }
-          message.success('分析成功');
-          // 数据展示
-          setChartOption(tmpOption);
-          setChartInfo(res.data);
-          console.log(chartOption);
+        if (res?.data) {
+          message.success('提交分析数据成功,后续可在历史数据中查看');
+          form.resetFields();
         } else {
           message.error(res.message);
         }
@@ -73,16 +64,16 @@ const AddChart: React.FC = () => {
   return (
     <PageContainer>
       <Row gutter={24}>
-        <Col span={12}>
+        <Col span={24}>
           <Card title={'智能分析'}>
-            <div className={'add-chart'}>
+            <div className={'add-chart-async'}>
               <Form
                 name="addChart"
+                form={form}
                 {...formItemLayout}
                 labelAlign={'left'}
                 onFinish={onFinish}
                 initialValues={{}}
-                style={{ maxWidth: 600 }}
               >
                 <Form.Item
                   {...formItemLayout}
@@ -145,39 +136,6 @@ const AddChart: React.FC = () => {
                   </Space>
                 </Form.Item>
               </Form>
-            </div>
-          </Card>
-        </Col>
-        <Col span={12}>
-          <Card title={'分析结论'}>
-            <div>
-              {!chartInfo?.genResult ? (
-                <div>
-                  {submitLoading ? (
-                    <Spin spinning={submitLoading} />
-                  ) : (
-                    <div>请上传图表等信息得到分析结论</div>
-                  )}
-                </div>
-              ) : (
-                chartInfo?.genResult
-              )}
-            </div>
-          </Card>
-          <br />
-          <Card title={'可视化图表'}>
-            <div>
-              {chartOption ? (
-                <ReactECharts option={chartOption} />
-              ) : (
-                <div>
-                  {submitLoading ? (
-                    <Spin spinning={submitLoading} />
-                  ) : (
-                    <div>请上传图表等信息得到分析结论</div>
-                  )}
-                </div>
-              )}
             </div>
           </Card>
         </Col>

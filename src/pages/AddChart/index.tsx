@@ -1,3 +1,4 @@
+// @ts-ignore
 import { genChartByAiUsingPOST } from '@/services/ytbi-backend/chartController';
 import { UploadOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
@@ -8,7 +9,7 @@ import React, { useState } from 'react';
  * 添加图表
  * @constructor
  */
-const AddChart: React.FC = () => {
+const AddChartAsync: React.FC = () => {
   const formItemLayout = {
     labelCol: { span: 6 },
     wrapperCol: { span: 14 },
@@ -169,9 +170,12 @@ const AddChart: React.FC = () => {
               {chartOption ? (
                 <ReactECharts option={chartOption} />
               ) : (
-                <div>请上传图表等信息得到分析结论</div>
+                <div>
+                  {
+                    submitLoading ? <Spin spinning={submitLoading} /> : <div>请上传图表等信息得到分析结论</div>
+                  }
+                </div>
               )}
-              <Spin spinning={submitLoading} />
             </div>
           </Card>
         </Col>
@@ -179,4 +183,4 @@ const AddChart: React.FC = () => {
     </PageContainer>
   );
 };
-export default AddChart;
+export default AddChartAsync;
