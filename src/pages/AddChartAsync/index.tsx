@@ -1,6 +1,10 @@
 // @ts-ignore
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import {genChartByAiAsyncUsingPOST, genChartByAiUsingPOST} from '@/services/ytbi-backend/chartController';
+import {
+  genChartByAiAsyncMqUsingPOST,
+  genChartByAiAsyncUsingPOST,
+  genChartByAiUsingPOST
+} from '@/services/ytbi-backend/chartController';
 import { UploadOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
 import { Button, Card, Col, Form, Input, message, Row, Select, Space, Upload } from 'antd';
@@ -17,7 +21,7 @@ const AddChart: React.FC = () => {
   };
 
   const [submitLoading, setSubmitLoading] = useState<boolean>(false);
-  const [form, setForm] = useForm();
+  const [form] = useForm();
 
   const normFile = (e: any) => {
     console.log('Upload event:', e);
@@ -40,7 +44,7 @@ const AddChart: React.FC = () => {
     };
     try {
       setSubmitLoading(true);
-      const res: API.BaseResponseBiResponse_ = await genChartByAiAsyncUsingPOST(
+      const res: API.BaseResponseBiResponse_ = await genChartByAiAsyncMqUsingPOST(
         params,
         {},
         values.file[0].originFileObj,

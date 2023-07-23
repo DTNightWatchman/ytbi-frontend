@@ -19,6 +19,6 @@
       { path: '/admin/add-chart', access: 'canAdmin', name: '添加图表', icon: 'BarChart', component: './AddChart' },
     ],
   },
-  { path: '/', redirect: '/add-chart' },
+  { path: '/', redirect: '/add-chart-async' },
   { path: '*', layout: false, component: './404' },
 ];
