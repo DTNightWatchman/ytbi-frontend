@@ -9,6 +9,7 @@ import React, { useCallback } from 'react';
 import { flushSync } from 'react-dom';
 import HeaderDropdown from '../HeaderDropdown';
 import {userLogoutUsingPOST} from "@/services/ytbi-backend/userController";
+import WebSocketComponent from "@/components/WebSocketComponent";
 
 export type GlobalHeaderRightProps = {
   menu?: boolean;
@@ -125,15 +126,19 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, childre
     },
   ];
 
+  // @ts-ignore
   return (
-    <HeaderDropdown
-      menu={{
-        selectedKeys: [],
-        onClick: onMenuClick,
-        items: menuItems,
-      }}
-    >
-      {children}
-    </HeaderDropdown>
+    <div>
+      <HeaderDropdown
+        menu={{
+          selectedKeys: [],
+          onClick: onMenuClick,
+          items: menuItems,
+        }}
+      >
+        {children}
+      </HeaderDropdown>
+      <WebSocketComponent />
+    </div>
   );
 };

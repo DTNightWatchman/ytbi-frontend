@@ -9,7 +9,7 @@ import defaultSettings from '../config/defaultSettings';
 import { AvatarDropdown, AvatarName } from './components/RightContent/AvatarDropdown';
 import { errorConfig } from './requestConfig';
 import {getLoginUserUsingGET} from "@/services/ytbi-backend/userController";
-const isDev = process.env.NODE_ENV === 'development';
+  const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
 
 /**
@@ -19,7 +19,8 @@ export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
   currentUser?: API.LoginUserVO;
   loading?: boolean;
-  fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
+  fetchUserInfo?: () => Promise<API.UserVO | undefined>;
+  auth?: string
 }> {
   const fetchUserInfo = async () => {
     try {
@@ -98,6 +99,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,
     // 增加一个 loading 的状态
+
     childrenRender: (children) => {
       // if (initialState?.loading) return <PageLoading />;
       return (

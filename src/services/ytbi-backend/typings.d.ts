@@ -131,6 +131,8 @@ declare namespace API {
   };
 
   type genChartByAiAsyncMqUsingPOSTParams = {
+    /** auth */
+    auth?: string;
     chartType?: string;
     goal?: string;
     name?: string;

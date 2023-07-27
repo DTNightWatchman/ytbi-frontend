@@ -1,5 +1,6 @@
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import '@umijs/max';
+
 export type SiderTheme = 'light' | 'dark';
 export const SelectLang = () => {
   return (
@@ -12,6 +13,7 @@ export const SelectLang = () => {
   );
 };
 export const Question = () => {
+
   return (
     <div
       style={{
