@@ -112,6 +112,36 @@ export async function userLoginUsingPOST(
   });
 }
 
+/** loginByEmail POST /api/user/login/code */
+export async function loginByEmailUsingPOST(
+  body: API.EmailLoginRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseUserVO_>('/api/user/login/code', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** getCode POST /api/user/login/code/get */
+export async function getCodeUsingPOST(
+  body: API.EmailLoginRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseInt_>('/api/user/login/code/get', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** userLoginByWxOpen GET /api/user/login/wx_open */
 export async function userLoginByWxOpenUsingGET(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)

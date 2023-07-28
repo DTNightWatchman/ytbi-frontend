@@ -1,8 +1,12 @@
 import Footer from '@/components/Footer';
-import { getLoginUserUsingGET, userLoginUsingPOST } from '@/services/ytbi-backend/userController';
 import {
-  LockOutlined,
-  MobileOutlined,
+  getCodeUsingPOST,
+  getLoginUserUsingGET,
+  loginByEmailUsingPOST,
+  userLoginUsingPOST
+} from '@/services/ytbi-backend/userController';
+import {
+  LockOutlined, MailTwoTone,
   UserOutlined,
 } from '@ant-design/icons';
 import { LoginForm, ProFormCaptcha, ProFormText } from '@ant-design/pro-components';
@@ -63,25 +67,66 @@ const Login: React.FC = () => {
       });
     }
   };
-  const handleSubmit = async (values: API.UserLoginRequest) => {
+
+  /**
+   * 获取验证码函数
+   * @param values
+   */
+  const getFakeCaptcha = async (values: API.EmailLoginRequest) => {
+    try {
+      const res = await getCodeUsingPOST(values);
+      if (res.code === 0) {
+        return '0';
+      } else {
+        return undefined;
+      }
+    } catch (error) {
+      const defaultLoginFailureMessage = '获取验证码失败，请重试！';
+      console.log(error);
+      message.error(defaultLoginFailureMessage);
+      return undefined;
+    }
+    return '0';
+   }
+  const handleSubmit = async (values: any) => {
+    alert("??")
     try {
       // 登录
-      const res: API.BaseResponseLoginUserVO_ = await userLoginUsingPOST({
-        ...values,
-      });
-      if (res.code === 0) {
-        const defaultLoginSuccessMessage = '登录成功！';
-        message.success(defaultLoginSuccessMessage);
-        await fetchUserInfo();
-        const urlParams = new URL(window.location.href).searchParams;
-        history.push(urlParams.get('redirect') || '/');
-        return;
-      } else {
-        message.error(res.message);
+      if (type === 'account') {
+        const res: API.BaseResponseLoginUserVO_ = await userLoginUsingPOST({
+          ...values,
+        });
+        if (res.code === 0) {
+          const defaultLoginSuccessMessage = '登录成功！';
+          message.success(defaultLoginSuccessMessage);
+          await fetchUserInfo();
+          const urlParams = new URL(window.location.href).searchParams;
+          history.push(urlParams.get('redirect') || '/');
+          return;
+        } else {
+          message.error(res.message);
+        }
+        console.log(res);
+        // 如果失败去设置用户错误信息
+        //setUserLoginState(msg);
+      } else if (type === 'email') {
+        const res: API.BaseResponseLoginUserVO_ = await loginByEmailUsingPOST({
+          ...values,
+        });
+        if (res.code === 0) {
+          const defaultLoginSuccessMessage = '登录成功！';
+          message.success(defaultLoginSuccessMessage);
+          await fetchUserInfo();
+          const urlParams = new URL(window.location.href).searchParams;
+          history.push(urlParams.get('redirect') || '/');
+          return;
+        } else {
+          message.error(res.message);
+        }
+        console.log(res);
+        // 如果失败去设置用户错误信息
+        //setUserLoginState(msg);
       }
-      console.log(res);
-      // 如果失败去设置用户错误信息
-      //setUserLoginState(msg);
     } catch (error) {
       const defaultLoginFailureMessage = '登录失败，请重试！';
       console.log(error);
@@ -89,6 +134,7 @@ const Login: React.FC = () => {
     }
   };
   const { status, type: loginType } = userLoginState;
+
   return (
     <div className={containerClassName}>
       <Helmet>
@@ -124,8 +170,8 @@ const Login: React.FC = () => {
                 label: '账户密码登录',
               },
               {
-                key: 'mobile',
-                label: '手机号登录',
+                key: 'email',
+                label: '邮箱登录或注册',
               },
             ]}
           />
@@ -166,24 +212,24 @@ const Login: React.FC = () => {
             </>
           )}
 
-          {status === 'error' && loginType === 'mobile' && <LoginMessage content="验证码错误" />}
-          {type === 'mobile' && (
+          {status === 'error' && loginType === 'email' && <LoginMessage content="验证码错误" />}
+          {type === 'email' && (
             <>
               <ProFormText
                 fieldProps={{
                   size: 'large',
-                  prefix: <MobileOutlined />,
+                  prefix: <MailTwoTone />,
                 }}
-                name="mobile"
-                placeholder={'请输入手机号！'}
+                name="userAccount"
+                placeholder={'请输入邮箱！'}
                 rules={[
                   {
                     required: true,
-                    message: '手机号是必填项！',
+                    message: '邮箱是必填项！',
                   },
                   {
-                    pattern: /^1\d{10}$/,
-                    message: '不合法的手机号！',
+                    pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(.[a-zA-Z0-9_-]+)+$/,
+                    message: '不合法的邮箱！',
                   },
                 ]}
               />
@@ -195,6 +241,7 @@ const Login: React.FC = () => {
                 captchaProps={{
                   size: 'large',
                 }}
+                countDown={120}
                 placeholder={'请输入验证码！'}
                 captchaTextRender={(timing, count) => {
                   if (timing) {
@@ -202,39 +249,44 @@ const Login: React.FC = () => {
                   }
                   return '获取验证码';
                 }}
-                name="captcha"
+                phoneName="userAccount"
+                name="code"
                 rules={[
                   {
                     required: true,
                     message: '验证码是必填项！',
                   },
                 ]}
-                onGetCaptcha={async (phone) => {
+                onGetCaptcha={async (userAccount) => {
+                  alert(userAccount)
                   const result = await getFakeCaptcha({
-                    phone,
+                    "userAccount": userAccount
                   });
                   if (!result) {
+                    message.error('发送验证码失败！');
                     return;
                   }
-                  message.success('获取验证码成功！验证码为：1234');
+                  message.success('发送验证码成功！请到邮箱查看');
                 }}
               />
             </>
           )}
-          <div
-            style={{
-              marginBottom: 24,
-            }}
-          >
-            <a
+          {
+            type !== 'email' ? <div
               style={{
-                float: 'right',
+                marginBottom: 24,
               }}
             >
-              忘记密码 ?
-            </a>
-            <br />
-          </div>
+              <a
+                style={{
+                  float: 'right',
+                }}
+              >
+                忘记密码 ?
+              </a>
+              <br />
+            </div> : null
+          }
         </LoginForm>
       </div>
       <Footer />
